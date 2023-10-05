@@ -181,5 +181,9 @@ transaction.session(async (session) => {
 await transaction.commit();
 ```
 
+If the scheme uses {timestamps: true} in the options, or the fields createdAt (if the document is new), updatedAt (for
+new and updates) - they will be automatically created or updated updatedAt.
+
+
 [![](https://img.shields.io/badge/mongoose-v5.x.x_and_up-blue?logo=mongoosedotws)](https://www.npmjs.com/package/mongoose)
 [![](https://img.shields.io/badge/Node.js-v16.x.x_and_up-blue?logo=nodedotjs)](https://nodejs.org)

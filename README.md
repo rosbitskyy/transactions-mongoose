@@ -25,7 +25,7 @@ const transaction = new Transaction().setSendbox(true);
 ### Create / Insert new document
 ```javascript
 const Transaction = require("transactions-mongoose");
-const transaction = new Transaction();
+const transaction = new Transaction().setSendbox(true);
 
 const transactionData1 = transaction.add(Person, {
     firstname: 'Sancho',
@@ -57,15 +57,16 @@ console.log('transaction 2 document', transactionData2.document)
 ### Update an existing one
 ```javascript
 const Transaction = require("transactions-mongoose");
-const transaction = new Transaction();
+const transaction = new Transaction().setSendbox(true);
 
-// variant #1
+// variant #1 - use standard setters
 let personSancho = await Person.findById('...Sancho id');
 personSancho.age += 1;
 personSancho.status = 'married';
 personSancho.friend_id = '...Hulio Iglessias id';
 transaction.add(Person, personSancho);
-// variant #2
+
+// variant #2 - by document and update object
 let personJanna = await Person.findById('...Janna id');
 transaction.add(Person, personJanna).update({
     age: ++personJanna.age,
@@ -73,7 +74,8 @@ transaction.add(Person, personJanna).update({
     friend_id: personSancho._id,
     bodyFriend_id: '...Hulio Iglessias id',
 });
-// variant #3
+
+// variant #3 - by ObjectId
 transaction.add(Person, {_id: '...Sancho id'}).update({
     friend_id: personJanna._id
 });
@@ -85,7 +87,7 @@ await transaction.commit();
 ```javascript
 const fetch = require("node-fetch");
 const Transaction = require("transactions-mongoose");
-const transaction = new Transaction();
+const transaction = new Transaction().setSendbox(true);
 
 const getAvatar = async (id) => {
     const response = await fetch('https://i.pravatar.cc/300?u=' + id);
@@ -128,5 +130,37 @@ transaction.add(Person, personJanna)
 
 await transaction.commit();
 console.log('transaction result', transactionData.result);
-
 ```
+
+### With session executor
+
+```javascript
+const Transaction = require("transactions-mongoose");
+const transaction = new Transaction().setSendbox(true);
+
+transaction.session(async (session) => {
+    let personJanna = await Person.findById('...Janna id');
+    personJanna.age++;
+    personJanna.updatedAt = Date.now()
+    await personJanna.save()
+
+    let personHulio = await Person.findById('...Hulio id');
+    personHulio.age++;
+    personHulio.updatedAt = Date.now()
+    await personHulio.save()
+
+    let personSancho = await Person.findById('...Sancho id');
+    transaction.add(Person, personSancho).update({
+        updatedAt: Date.now(),
+        __v: ++personSancho.__v
+    });
+
+    throw new Error('Test an error - or remark me') // No changes will be saved
+
+    // there must be a return result - and it must be a mongo document
+    return personJanna
+});
+
+await transaction.commit();
+```
+

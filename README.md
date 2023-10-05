@@ -8,6 +8,8 @@
 This module allows you to combine different transactions and operations into a group and execute them together.
 Pre-checks the schema for errors, duplication of unique indexes/fields
 
+Very simple and extremely easy ☕️
+
 ### Install module
 
 ```shell

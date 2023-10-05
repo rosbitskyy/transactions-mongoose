@@ -16,11 +16,15 @@ Very simple and extremely easy ☕️ :
 
 And yes, let's start!
 
-### Install module
+### Installation
+
+First install [Node.js](https://nodejs.org/uk) and [MongoDB](https://www.mongodb.com/try). Then:
 
 ```shell
 npm i transactions-mongoose
 ```
+
+Mongoose [7.5.4](https://www.npmjs.com/package/transactions-mongoose?activeTab=dependencies) also included
 
 ### Usage
 
@@ -105,8 +109,10 @@ const getAvatar = async (id) => {
     const blob = await response.blob();
     return new Promise((onSuccess, onError) => {
         const reader = new FileReader() ;
-        reader.onload = function(){ onSuccess(this.result) } ;
-        reader.readAsDataURL(blob) ;
+        reader.onload = function () {
+            onSuccess(this.result)
+        };
+        reader.readAsDataURL(blob);
     });
 };
 
@@ -175,4 +181,5 @@ transaction.session(async (session) => {
 await transaction.commit();
 ```
 
-[![](https://img.shields.io/badge/Node.js-v16.x.x-blue?logo=nodedotjs)](https://nodejs.org)
+[![](https://img.shields.io/badge/mongoose-v5.x.x_and_up-blue?logo=mongoosedotws)](https://www.npmjs.com/package/mongoose)
+[![](https://img.shields.io/badge/Node.js-v16.x.x_and_up-blue?logo=nodedotjs)](https://nodejs.org)

@@ -1,4 +1,4 @@
-# Transactions for mongoose
+# 🇺🇦 Transactions for mongoose
 
 [![npm version](https://img.shields.io/npm/v/transactions-mongoose.svg)](https://www.npmjs.com/package/transactions-mongoose)
 [![Downloads/month](https://img.shields.io/npm/dm/transactions-mongoose.svg)](http://www.npmtrends.com/transactions-mongoose)

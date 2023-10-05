@@ -1,0 +1,26 @@
+{
+  "name": "transactions-mongoose",
+  "version": "1.1.1",
+  "description": "Transactions for mongoose",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rosbitskyy/transactions-mongoose.git"
+  },
+  "keywords": [
+    "nodejs",
+    "mongo",
+    "mongoose",
+    "transaction",
+    "mongoose transactions"
+  ],
+  "author": {
+    "name": "🇺🇦Rosbitskyy Ruslan",
+    "email": "rosbitskyy@gmail.com",
+    "url": "https://github.com/rosbitskyy/"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^7.5.4"
+  }
+}

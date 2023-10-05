@@ -8,7 +8,13 @@
 This module allows you to combine different transactions and operations into a group and execute them together.
 Pre-checks the schema for errors, duplication of unique indexes/fields
 
-Very simple and extremely easy ☕️
+Very simple and extremely easy ☕️ :
+
+- A couple of methods for everything
+- Mix executors as you like
+- Use the session for your usual, standard saving
+
+And yes, let's start!
 
 ### Install module
 

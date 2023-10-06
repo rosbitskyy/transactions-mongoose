@@ -47,7 +47,7 @@ const createNewPersons = async () => {
 const getAvatar = async (id) => {
     const response = await fetch('https://i.pravatar.cc/50?u=' + id);
     const blob = await response.blob()
-    return Buffer.from(await blob.arrayBuffer()).toString('base64');
+    return "data:" + blob.type + ';base64,' + Buffer.from(await blob.arrayBuffer()).toString('base64');
 };
 
 module.exports = {

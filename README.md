@@ -37,7 +37,7 @@ const transaction = new Transaction().setSendbox(true);
 
 ## An exemplary use case
 
-### Create / Insert new document
+### [Create / Insert new document](https://github.com/rosbitskyy/transactions-mongoose/blob/main/examples/create-insert.js)
 ```javascript
 const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
@@ -69,7 +69,7 @@ console.log('transaction 1 result', transactionData1.result) // the result of th
 console.log('transaction 2 document', transactionData2.document)
 ```
 
-### Update an existing one
+### [Update an existing one](https://github.com/rosbitskyy/transactions-mongoose/blob/main/examples/update-existing.js)
 ```javascript
 const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
@@ -98,7 +98,7 @@ transaction.add(Person, {_id: '...Sancho id'}).update({
 await transaction.commit();
 ```
 
-### Executing an isolated block that may fail is not related to Mongo but affects whether the data is saved or not.
+### [Executing an isolated block that may fail is not related to Mongo but affects whether the data is saved or not.](https://github.com/rosbitskyy/transactions-mongoose/blob/main/examples/execute.js)
 ```javascript
 const fetch = require("node-fetch");
 const {Transaction} = require("transactions-mongoose");
@@ -149,7 +149,7 @@ await transaction.commit();
 console.log('transaction result', transactionData.result.result);
 ```
 
-### With session executor
+### [With session executor](https://github.com/rosbitskyy/transactions-mongoose/blob/main/examples/sessions.js)
 
 ```javascript
 const {Transaction} = require("transactions-mongoose");

@@ -1,6 +1,6 @@
 {
   "name": "transactions-mongoose",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Transactions for mongoose",
   "main": "index.js",
   "repository": {
@@ -27,6 +27,10 @@
     "mongodb-memory-server": "^8.16.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "npm run test:insert && npm run test:update && npm run test:execute && npm run test:session",
+    "test:insert": "node ./examples/create-insert.js",
+    "test:update": "node ./examples/update-existing.js",
+    "test:execute": "node ./examples/execute.js",
+    "test:session": "node ./examples/sessions.js"
   }
 }

@@ -29,27 +29,32 @@ const personHelper = require('./personHelper');
     let personHulio = await Person.findById(persons.Hulio._id);
 
 
-    transaction.session(async (session) => {
-        personJanna.age++;
-        personJanna.updatedAt = Date.now()
-        await personJanna.save()
+    try {
 
-        personHulio.age++;
-        personHulio.updatedAt = Date.now()
-        await personHulio.save()
+        transaction.session(async (session) => {
+            personJanna.age++;
+            personJanna.updatedAt = Date.now()
+            await personJanna.save()
 
-        transaction.add(Person, personSancho).update({
-            updatedAt: Date.now(),
-            __v: ++personSancho.__v
+            personHulio.age++;
+            personHulio.updatedAt = Date.now()
+            await personHulio.save()
+
+            transaction.add(Person, personSancho).update({
+                updatedAt: Date.now(),
+                __v: ++personSancho.__v
+            });
+
+            throw new Error('Test an error - or remark me') // No changes will be saved
+
+            // there must be a return result - and it must be a mongo document
+            return personJanna
         });
+        await transaction.commit();
 
-        throw new Error('Test an error - or remark me') // No changes will be saved
-
-        // there must be a return result - and it must be a mongo document
-        return personJanna
-    });
-    await transaction.commit();
-
+    } catch (e) {
+        console.log(e, '\nPassed!!')
+    }
 
     await mongoose.disconnect();
     await mongod.stop();

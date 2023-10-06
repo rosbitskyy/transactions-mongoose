@@ -29,7 +29,7 @@ Mongoose [7.5.4](https://www.npmjs.com/package/transactions-mongoose?activeTab=d
 ### Usage
 
 ```javascript
-const Transaction = require("transactions-mongoose");
+const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction();
 // or with debug log
 const transaction = new Transaction().setSendbox(true);
@@ -39,7 +39,7 @@ const transaction = new Transaction().setSendbox(true);
 
 ### Create / Insert new document
 ```javascript
-const Transaction = require("transactions-mongoose");
+const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
 
 const transactionData1 = transaction.add(Person, {
@@ -53,7 +53,7 @@ const transactionData2 = transaction.add(Person, {
     firstname: 'Janna',
     lastname: 'Dark',
     age: 21,
-    sex: 'famale',
+    sex: 'female',
     status: 'free'
 });
 transaction.add(Person, {
@@ -65,13 +65,13 @@ transaction.add(Person, {
 });
 await transaction.commit();
 
-console.log('transaction 1', transactionData1.result) // the result of the save() operation
+console.log('transaction 1 result', transactionData1.result) // the result of the save() operation
 console.log('transaction 2 document', transactionData2.document)
 ```
 
 ### Update an existing one
 ```javascript
-const Transaction = require("transactions-mongoose");
+const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
 
 // variant #1 - use standard setters
@@ -101,7 +101,7 @@ await transaction.commit();
 ### Executing an isolated block that may fail is not related to Mongo but affects whether the data is saved or not.
 ```javascript
 const fetch = require("node-fetch");
-const Transaction = require("transactions-mongoose");
+const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
 
 const getAvatar = async (id) => {
@@ -138,7 +138,7 @@ const transactionData = transaction.execute(async () => {
     // The result can be whatever you want
     // we will return the Janna document update result
     // https://mongoosejs.com/docs/api/query.html#Query.prototype.updateOne()
-    return td.result 
+    return td
 });
 
 // and also execute it :)
@@ -146,13 +146,13 @@ personJanna.updatedAt = Date.now()
 transaction.add(Person, personJanna)
 
 await transaction.commit();
-console.log('transaction result', transactionData.result);
+console.log('transaction result', transactionData.result.result);
 ```
 
 ### With session executor
 
 ```javascript
-const Transaction = require("transactions-mongoose");
+const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
 
 transaction.session(async (session) => {

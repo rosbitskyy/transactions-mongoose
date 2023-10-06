@@ -297,7 +297,11 @@ class TransactionError extends Error {
             funcType + (_T.function.withSession ? ' with Session' : '');
         this.transaction = {
             id, ...(name && {document: name}),
-            model: model || funcType, checkAsyncValidators, checkValidateSchema, checkValidateUniques, modifiedData,
+            model: (model || {}).modelName || funcType,
+            checkAsyncValidators,
+            checkValidateSchema,
+            checkValidateUniques,
+            modifiedData,
         }
     }
 

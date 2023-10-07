@@ -151,7 +151,7 @@ console.log('transaction result', transactionData.result.result);
 
 ### [With session executor](https://github.com/rosbitskyy/transactions-mongoose/blob/main/examples/sessions.js)
 
-To use with Mondo Replica set
+To use with Mongo Replica set
 ```javascript
 const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);

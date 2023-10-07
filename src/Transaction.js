@@ -509,9 +509,9 @@ class Transaction {
                         throw new Error('Execute function with Session must return Model/Document')
                     return rv;
                 }).then((doc) => session.commitTransaction()).then((doc) => session.endSession())
-                    .catch(e => {
-                        session.abortTransaction()
-                        session.endSession()
+                    .catch(async (e) => {
+                        await session.abortTransaction()
+                        await session.endSession()
                         throw e
                     })
             } else {

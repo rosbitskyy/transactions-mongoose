@@ -151,26 +151,25 @@ console.log('transaction result', transactionData.result.result);
 
 ### [With session executor](https://github.com/rosbitskyy/transactions-mongoose/blob/main/examples/sessions.js)
 
+To use with Mondo Replica set
 ```javascript
 const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
 
 transaction.session(async (session) => {
-    let personJanna = await Person.findById('...Janna id');
-    personJanna.age++;
-    personJanna.updatedAt = Date.now()
-    await personJanna.save()
 
-    let personHulio = await Person.findById('...Hulio id');
-    personHulio.age++;
-    personHulio.updatedAt = Date.now()
-    await personHulio.save()
+    let personSancho = await Person.findById('...Sancho id').session(session);
+    let personJanna = await Person.findById('...Janna id').session(session);
+    let personHulio = await Person.findById('...Hulio id').session(session);
 
-    let personSancho = await Person.findById('...Sancho id');
-    transaction.add(Person, personSancho).update({
-        updatedAt: Date.now(),
-        __v: ++personSancho.__v
-    });
+    personSancho.age = 100; // <-- let's try to make it more mature
+    await personSancho.save({session})
+
+    personJanna.age = 100; // <-- let's try to make it more mature too
+    await personJanna.save({session})
+
+    personHulio.age = 100; // <-- let's try to make it more mature too
+    await personHulio.save({session})
 
     throw new Error('Test an error - or remark me') // No changes will be saved
 

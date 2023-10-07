@@ -90,6 +90,61 @@ const personHelper = require('./personHelper');
     }
     await showPersonsAge();
 
+    // with error
+    // Reload document with/without session, save with/without
+    try {
+        transaction.session(async (session) => {
+
+            let personSancho = await Person.findById(persons.Sancho._id).session(session); // test Sancho exists?
+            let personJanna = await Person.findById(persons.Janna._id).session(session);
+            let personHulio = await Person.findById(persons.Hulio._id); // no session
+
+            personSancho.age = 100; // <-- let's try to make it more mature
+            await personSancho.save()
+
+            personJanna.age = 100; // <-- let's try to make it more mature too
+            await personJanna.save() // save without {session}, reload with session
+
+            personHulio.age = 100; // <-- let's try to make it more mature too
+            await personHulio.save({session}) // <-- session
+
+            throw new Error('Test an error - or remark me') // No changes will be saved
+
+            // there must be a return result - and it must be a mongo document
+            return personJanna
+        });
+        await transaction.commit();
+
+    } catch (e) {
+        console.log(e, '\nPassed!!')
+    }
+    await showPersonsAge()
+
+    // no error
+    // Reload document with/without session, save with/without
+    transaction.session(async (session) => {
+
+        let personSancho = await Person.findById(persons.Sancho._id); // reload with session
+        let personJanna = await Person.findById(persons.Janna._id).session(session);
+        let personHulio = await Person.findById(persons.Hulio._id); // reload with session
+
+        personSancho.age = 100; // <-- let's try to make it more mature
+        await personSancho.save({session}) // <-- session
+
+        personJanna.age = 100; // <-- let's try to make it more mature too
+        await personJanna.save() // save without {session}, reload with session
+
+        personHulio.age = 100; // <-- let's try to make it more mature too
+        await personHulio.save({session}) // <-- session
+
+        // there must be a return result - and it must be a mongo document
+        return personJanna
+    });
+    await transaction.commit();
+
+    console.log('Sancho age is 100 -', await Person.findById(persons.Sancho._id).select('age'))
+    console.log('Janna age is 100 -', await Person.findById(persons.Janna._id).select('age'))
+    console.log('Hulio age is 100 -', await Person.findById(persons.Hulio._id).select('age'), '\n\n')
 
     await mongoose.disconnect();
     await mongod.stop();

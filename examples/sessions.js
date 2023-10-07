@@ -124,15 +124,18 @@ const personHelper = require('./personHelper');
     // Reload document with/without session, save with/without
     transaction.session(async (session) => {
 
-        let personSancho = await Person.findById(persons.Sancho._id); // reload with session
-        let personJanna = await Person.findById(persons.Janna._id).session(session);
-        let personHulio = await Person.findById(persons.Hulio._id); // reload with session
+        let personSancho = await Person.findById(persons.Sancho._id); // reload without session
+        let personJanna = await Person.findById(persons.Janna._id).session(session); // reload with session
+        let personHulio = await Person.findById(persons.Hulio._id); // reload without session
 
         personSancho.age = 100; // <-- let's try to make it more mature
         await personSancho.save({session}) // <-- session
 
-        personJanna.age = 100; // <-- let's try to make it more mature too
+        personJanna.age = 99; // <-- let's try to make it more mature too
         await personJanna.save() // save without {session}, reload with session
+
+        personJanna.age = 100; // <-- let's try to make it more mature too
+        await personJanna.save({session}) // save without {session}, reload with session
 
         personHulio.age = 100; // <-- let's try to make it more mature too
         await personHulio.save({session}) // <-- session

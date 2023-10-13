@@ -79,6 +79,15 @@ const personHelper = require('./personHelper');
             personHulio.status = '???'; // <-- Error validate
             await personHulio.save({session})
 
+            const person = new Person({
+                firstname: 'Pedro',
+                lastname: 'Okko',
+                age: 33,
+                sex: 'male',
+                status: 'free'
+            })
+            await person.save({session}) // will not be created
+
             return personJanna
         });
         await transaction.commit();
@@ -105,6 +114,15 @@ const personHelper = require('./personHelper');
 
             personHulio.age = 100; // <-- let's try to make it more mature too
             await personHulio.save({session}) // <-- session
+
+            const person = new Person({
+                firstname: 'Pedro',
+                lastname: 'Okko',
+                age: 33,
+                sex: 'male',
+                status: 'free'
+            })
+            await person.save({session}) // will not be created
 
             throw new Error('Test an error - or remark me') // No changes will be saved
 
@@ -136,12 +154,22 @@ const personHelper = require('./personHelper');
         personHulio.age = 100; // <-- let's try to make it more mature too
         await personHulio.save({session}) // <-- session
 
+        const person = new Person({
+            firstname: 'Pedro',
+            lastname: 'Okko',
+            age: 33,
+            sex: 'male',
+            status: 'free'
+        })
+        await person.save({session}) // will be created
+
     });
     await transaction.commit();
 
-    console.log('Sancho age is 100 -', await Person.findById(persons.Sancho._id).select('-_id age'))
-    console.log('Janna age is 100 -', await Person.findById(persons.Janna._id).select('-_id age'))
-    console.log('Hulio age is 100 -', await Person.findById(persons.Hulio._id).select('-_id age'), '\n\n')
+    // list all persons
+    for await (let v of (await Person.find({}, {firstname: 1, age: 1}).cursor())) {
+        console.log(v.name, 'age is', v.age)
+    }
 
     await mongoose.disconnect();
     await mongod.stop();

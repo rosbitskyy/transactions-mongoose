@@ -21,6 +21,9 @@ const schema = new mongoose.Schema({
 }, {
     timestamps: true
 })
+schema.virtual('name').get(function () {
+    return this.firstname;
+})
 
 const Person = mongoose.model('Person', schema);
 module.exports = Person;

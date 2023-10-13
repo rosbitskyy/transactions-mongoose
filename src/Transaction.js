@@ -19,6 +19,7 @@ String.prototype.capitalize = function () {
 }
 
 const Namespace = require('mongoose');
+const mongoose = require("mongoose");
 
 class Document {
     _ABSTRACT = 'Abstract';
@@ -330,6 +331,7 @@ class TransactionError extends Error {
 
 class Transaction {
 
+    #REPLICA_SET = 'replicaSet';
     /**
      * @type {{updated:Document[], created:TransactionData[]}}
      */
@@ -406,11 +408,36 @@ class Transaction {
     }
 
     /**
+     * options: MongoOptions: node_modules/mongodb/src/connection_string.ts
+     * @return {{connectionString:string,options:{userSpecifiedReplicaSet:boolean,replicaSet:string,hosts:[]}}}
+     */
+    get client() {
+        const v = Namespace.default || {};
+        v.connectionString = (v.connection || {})._connectionString;
+        v.options = ((v.connection || {}).client || {}).options || {};
+        return v;
+    }
+
+    /**
+     * @return {string}
+     */
+    get connectionString() {
+        return this.client.connectionString
+    }
+
+    /**
+     * @return {boolean}
+     */
+    get isReplicaSet() {
+        return this.client.options.userSpecifiedReplicaSet && !!this.client.options.replicaSet
+    }
+
+    /**
      * @param {TransactionData} transaction
      */
     #verifySessionCallback(transaction) {
-        if (transaction && transaction.isExecutor && this.useStrict ||
-            this.transactions.filter(it => it.isModel).length > 0) {
+        if (transaction && transaction.isExecutor && !this.isReplicaSet && (this.useStrict ||
+            this.transactions.filter(it => it.isModel).length > 0)) {
             const pattern = /[^\s\S]*?new \w.*\([\s\S|.]*?{[\s\S|.]*?}[\s\S|.]*?\)/gm;
             let fnStr = transaction.function.toString();
             let results = Array.from(fnStr.matchAll(pattern));
@@ -444,7 +471,7 @@ class Transaction {
                     }
                 }
                 if (list.length) {
-                    let message = 'Attempting to use Session with previously used add transaction elements without using Mongo sessions.' +
+                    let message = 'Attempting to create a new object (document) using a session without a replica set.' +
                         '\n\tUse strick: ' + this.#strict + '\n';
                     for (let it of list) {
                         message += '\tPosition: ' + it.debugLine +
@@ -502,7 +529,7 @@ class Transaction {
         let rv, session;
         if (transaction.isExecutor && transaction.type === transaction.FUNCTION) {
             if (transaction.function.withSession) {
-                await Namespace.default.startSession().then(async (_session) => {
+                await this.client.startSession().then(async (_session) => {
                     (session = _session).startTransaction();
                     rv = await transaction.function(session);
                     await session.commitTransaction();

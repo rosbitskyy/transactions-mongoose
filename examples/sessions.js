@@ -166,10 +166,12 @@ const personHelper = require('./personHelper');
     });
     await transaction.commit();
 
-    // list all persons
-    for await (let v of (await Person.find({}, {firstname: 1, age: 1}).cursor())) {
-        console.log(v.name, 'age is', v.age)
-    }
+    console.log('List of all Persons:')
+    for await (let v of (await Person.find({}, {
+        firstname: 1,
+        age: 1
+    }).cursor())) console.log('\t', v.name, 'age is', v.age)
+
 
     await mongoose.disconnect();
     await mongod.stop();

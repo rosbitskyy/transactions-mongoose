@@ -419,13 +419,6 @@ class Transaction {
     }
 
     /**
-     * @return {string}
-     */
-    get connectionString() {
-        return this.client.connectionString
-    }
-
-    /**
      * @return {boolean}
      */
     get isReplicaSet() {

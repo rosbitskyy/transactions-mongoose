@@ -31,9 +31,9 @@ const personHelper = require('./personHelper');
 
     const showPersonsAge = async () => {
         // let's check that nothing has changed?
-        console.log('Sancho age is 22 -', await Person.findById(persons.Sancho._id).select('age'))
-        console.log('Janna age is 21 -', await Person.findById(persons.Janna._id).select('age'))
-        console.log('Hulio age is 35 -', await Person.findById(persons.Hulio._id).select('age'), '\n\n')
+        console.log('Sancho age is 22 -', await Person.findById(persons.Sancho._id).select('-_id age'))
+        console.log('Janna age is 21 -', await Person.findById(persons.Janna._id).select('-_id age'))
+        console.log('Hulio age is 35 -', await Person.findById(persons.Hulio._id).select('-_id age'), '\n\n')
     }
 
 
@@ -145,9 +145,9 @@ const personHelper = require('./personHelper');
     });
     await transaction.commit();
 
-    console.log('Sancho age is 100 -', await Person.findById(persons.Sancho._id).select('age'))
-    console.log('Janna age is 100 -', await Person.findById(persons.Janna._id).select('age'))
-    console.log('Hulio age is 100 -', await Person.findById(persons.Hulio._id).select('age'), '\n\n')
+    console.log('Sancho age is 100 -', await Person.findById(persons.Sancho._id).select('-_id age'))
+    console.log('Janna age is 100 -', await Person.findById(persons.Janna._id).select('-_id age'))
+    console.log('Hulio age is 100 -', await Person.findById(persons.Hulio._id).select('-_id age'), '\n\n')
 
     await mongoose.disconnect();
     await mongod.stop();

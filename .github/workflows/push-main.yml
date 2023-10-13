@@ -13,7 +13,7 @@ jobs:
       matrix:
         node: [18, 20]
         os: [ubuntu-22.04, ubuntu-latest]
-    name: CUES(with Replica Set) - Node ${{ matrix.node }} OS ${{ matrix.os }}
+    name: Node ${{ matrix.node }} OS ${{ matrix.os }} CUES(with/out Replica Set)
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

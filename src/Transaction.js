@@ -408,7 +408,7 @@ class Transaction {
     }
 
     /**
-     * options: MongoOptions: node_modules/mongodb/src/connection_string.ts
+     * options: MongoOptions: node_modules/mongodb/src/connection_string.ts:259
      * @return {{connectionString:string,options:{userSpecifiedReplicaSet:boolean,replicaSet:string,hosts:[]}}}
      */
     get client() {

@@ -504,16 +504,14 @@ class Transaction {
             if (transaction.function.withSession) {
                 await Namespace.default.startSession().then(async (_session) => {
                     (session = _session).startTransaction();
-                    rv = await transaction.function(session)
-                    if (!rv || rv.constructor.name !== transaction.MODEL)
-                        throw new Error('Execute function with Session must return Model/Document')
+                    rv = await transaction.function(session);
+                    await session.commitTransaction();
                     return rv;
-                }).then((doc) => session.commitTransaction()).then((doc) => session.endSession())
-                    .catch(async (e) => {
-                        await session.abortTransaction()
-                        await session.endSession()
-                        throw e
-                    })
+                }).then((doc) => session.endSession()).catch(async (e) => {
+                    await session.abortTransaction()
+                    await session.endSession()
+                    throw e
+                })
             } else {
                 rv = await transaction.function()
             }

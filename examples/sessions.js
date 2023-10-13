@@ -51,7 +51,6 @@ const personHelper = require('./personHelper');
 
             throw new Error('Test an error - or remark me') // No changes will be saved
 
-            // there must be a return result - and it must be a mongo document
             return personJanna
         });
         await transaction.commit();
@@ -80,7 +79,6 @@ const personHelper = require('./personHelper');
             personHulio.status = '???'; // <-- Error validate
             await personHulio.save({session})
 
-            // there must be a return result - and it must be a mongo document
             return personJanna
         });
         await transaction.commit();
@@ -110,8 +108,6 @@ const personHelper = require('./personHelper');
 
             throw new Error('Test an error - or remark me') // No changes will be saved
 
-            // there must be a return result - and it must be a mongo document
-            return personJanna
         });
         await transaction.commit();
 
@@ -140,8 +136,6 @@ const personHelper = require('./personHelper');
         personHulio.age = 100; // <-- let's try to make it more mature too
         await personHulio.save({session}) // <-- session
 
-        // there must be a return result - and it must be a mongo document
-        return personJanna
     });
     await transaction.commit();
 

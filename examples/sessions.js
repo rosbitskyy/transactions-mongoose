@@ -81,7 +81,7 @@ const personHelper = require('./personHelper');
 
             const person = new Person({
                 firstname: 'Pedro',
-                lastname: 'Okko',
+                lastname: 'Failed',
                 age: 33,
                 sex: 'male',
                 status: 'free'
@@ -117,7 +117,7 @@ const personHelper = require('./personHelper');
 
             const person = new Person({
                 firstname: 'Pedro',
-                lastname: 'Okko',
+                lastname: 'Failed',
                 age: 33,
                 sex: 'male',
                 status: 'free'
@@ -156,7 +156,7 @@ const personHelper = require('./personHelper');
 
         const person = new Person({
             firstname: 'Pedro',
-            lastname: 'Okko',
+            lastname: 'Okay',
             age: 33,
             sex: 'male',
             status: 'free'

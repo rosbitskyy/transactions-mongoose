@@ -10,7 +10,9 @@ on:
       - 'index.js'
       - 'src/**'
       - 'examples/**'
-
+permissions:
+      contents: read
+      
 jobs:
   test:
     runs-on: ${{ matrix.os }}

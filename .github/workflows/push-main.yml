@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/push-main.yml'
+      - 'package.json'
+      - 'index.js'
+      - 'src/**'
+      - 'examples/**'
 
 jobs:
   test:
@@ -12,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [18, 20]
-        os: [ubuntu-22.04, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
     name: Node ${{ matrix.node }} OS ${{ matrix.os }} CUES(with/out Replica Set)
     steps:
       - uses: actions/checkout@v3

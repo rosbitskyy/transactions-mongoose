@@ -24,7 +24,7 @@ First install [Node.js](https://nodejs.org/uk) and [MongoDB](https://www.mongodb
 npm i transactions-mongoose
 ```
 
-Mongoose [7.5.4](https://www.npmjs.com/package/transactions-mongoose?activeTab=dependencies) also included
+Mongoose [latest](https://www.npmjs.com/package/transactions-mongoose?activeTab=dependencies) also included
 
 ### Usage
 

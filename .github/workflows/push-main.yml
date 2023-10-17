@@ -12,9 +12,10 @@ on:
       - 'examples/**'
 permissions:
   contents: read
+  checks: write
 
 jobs:
-  crud_no_replica_and_replicaset:
+  no_replica_and_replicaset:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -31,8 +32,8 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  execute_fetch_request:
-    needs: [ crud_no_replica_and_replicaset ]
+  with_executor:
+    needs: [ no_replica_and_replicaset ]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -49,15 +50,8 @@ jobs:
       - run: npm install --package-lock-only
       - run: npm ci
       - run: npm run test:${{ matrix.test }}
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-without-markdown
-          path: |
-            dist
-            !dist/**/*.md
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage-report
-          path: output/test/code-coverage.html
+          path: out/code-coverage.html

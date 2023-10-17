@@ -31,6 +31,7 @@ Mongoose [latest](https://www.npmjs.com/package/transactions-mongoose?activeTab=
 ```javascript
 const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction();
+
 // or with debug log
 const transaction = new Transaction().setSendbox(true);
 ```

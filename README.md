@@ -172,7 +172,7 @@ transaction.session(async (session) => {
 
     throw new Error('Test an error - or remark me') // No changes will be saved
 
-    // there must be a return result - and it must be a mongo document
+    // return result - The result can be whatever you want
     return personJanna
 });
 

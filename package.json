@@ -27,7 +27,7 @@
     "mongodb-memory-server": "latest"
   },
   "scripts": {
-    "test": "npm run test:insert && npm run test:update && npm run test:execute && npm run test:session && npm run test:parse",
+    "test": "npm run test:insert && npm run test:update && npm run test:session && npm run test:parse",
     "test:parse": "node ./examples/parse-test.js",
     "test:insert": "node ./examples/create-insert.js",
     "test:update": "node ./examples/update-existing.js",

@@ -30,7 +30,7 @@ const personHelper = require('./personHelper');
 
 
     const transactionData = transaction.execute(async () => {
-        transaction.add(Person, personSancho).update({
+        transaction.add(personSancho).update({
             updatedAt: Date.now(),
             __v: ++personSancho.__v
         });
@@ -39,11 +39,11 @@ const personHelper = require('./personHelper');
 
         transaction.execute(async () => {
             personHulio.avatar = await personHelper.getAvatar(personHulio._id);
-            transaction.add(Person, personHulio)
+            transaction.add(personHulio)
         });
 
         personJanna.avatar = await personHelper.getAvatar(personJanna._id);
-        const td = transaction.add(Person, personJanna)
+        const td = transaction.add(personJanna)
 
         // The result can be whatever you want
         // we will return the Janna document update result
@@ -53,7 +53,7 @@ const personHelper = require('./personHelper');
 
     // and also execute it :)
     personJanna.updatedAt = Date.now()
-    transaction.add(Person, personJanna)
+    transaction.add(personJanna)
 
     await transaction.commit();
     console.log('transaction result', transactionData.result.result);

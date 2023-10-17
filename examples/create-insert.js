@@ -20,14 +20,16 @@ const {Transaction} = require("../src/index");
 
     const transaction = new Transaction().setSendbox(true);
 
-    const transactionData1 = transaction.add(Person, {
+    const transactionData1 = transaction.add({
+        Person,
         firstname: 'Sancho',
         lastname: 'Panse',
         age: 22,
         sex: 'male',
         status: 'free'
     });
-    const transactionData2 = transaction.add(Person, {
+    const transactionData2 = transaction.add({
+        Model: 'Person',
         firstname: 'Janna',
         lastname: 'Dark',
         age: 21,

@@ -19,7 +19,6 @@ String.prototype.capitalize = function () {
 }
 
 const Namespace = require('mongoose');
-const mongoose = require("mongoose");
 
 class Document {
     _ABSTRACT = 'Abstract';
@@ -123,6 +122,67 @@ class Document {
 
     async clear() {
         if (Namespace.modelNames().includes(this._modelName)) Namespace.deleteModel(this._modelName)
+    }
+}
+
+class NamespaceParser {
+    /**
+     * @param {object|HydratedDocument} v
+     * @return {boolean}
+     */
+    isModel = (v) => !!v && !!v.modelName && !!v.find;
+    /**
+     * @param {object|HydratedDocument} v
+     * @return {boolean}
+     */
+    isDocument = (v) => !!v && v.constructor && v.constructor.name === 'model' && !!v.constructor.modelName && !!v._doc;
+    /**
+     * @param {object|HydratedDocument} v
+     * @return {HydratedDocument|null}
+     */
+    documentModel = (v) => this.isDocument(v) && v.db ? (v.db.models[Object.keys(v.db.models)[0]]) : null;
+    /**
+     * @param {object} v
+     * @return {boolean}
+     */
+    isCleanDocument = (v) => !!v && v.constructor === {}.constructor && !this.isDocument(v) && typeof v !== 'function';
+    /**
+     * @param {object: {Model,any}|HydratedDocument} v
+     * @return {*|(function(string): Model<InferSchemaType<any>, ObtainSchemaGeneric<any, "TQueryHelpers">, ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TVirtuals">, HydratedDocument<InferSchemaType<any>, ObtainSchemaGeneric<any, "TVirtuals"> & ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TQueryHelpers">>, any>)|string|Model<any>|null|(Model<InferSchemaType<any>, ObtainSchemaGeneric<any, "TQueryHelpers">, ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TVirtuals">, HydratedDocument<InferSchemaType<any>, ObtainSchemaGeneric<any, "TVirtuals"> & ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TQueryHelpers">>, any> & ObtainSchemaGeneric<any, "TStaticMethods">)}
+     */
+    getCleanDocModel = (v) => {
+        if (!!v && this.isCleanDocument(v)) {
+            if (v.Model) {
+                if (this.isModel(v.Model)) return v.Model;
+                else if (v.Model.constructor === ''.constructor && Namespace.modelNames().includes(v.Model)) return Namespace.model(v.Model)
+            } else if (v.constructor === {}.constructor) for (let k of Object.keys(v)) if (this.isModel(v[k])) return v[k];
+        }
+        return null;
+    }
+
+    /**
+     * @param {object: {Model,any}|HydratedDocument} v
+     * @return {(function(string): Model<InferSchemaType<any>, ObtainSchemaGeneric<any, "TQueryHelpers">, ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TVirtuals">, HydratedDocument<InferSchemaType<any>, ObtainSchemaGeneric<any, "TVirtuals"> & ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TQueryHelpers">>, any>)|string|Model<any>|*|Model<InferSchemaType<any>, ObtainSchemaGeneric<any, "TQueryHelpers">, ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TVirtuals">, HydratedDocument<InferSchemaType<any>, ObtainSchemaGeneric<any, "TVirtuals"> & ObtainSchemaGeneric<any, "TInstanceMethods">, ObtainSchemaGeneric<any, "TQueryHelpers">>, any>|null}
+     */
+    parseModel(v) {
+        let m = this.documentModel(v);
+        if (this.isModel(m)) return m;
+        else return this.getCleanDocModel(v);
+    }
+
+    /**
+     * @param {object} v
+     * @return {boolean}
+     */
+    isExecutor = (v) => !!v && typeof v === 'function';
+
+    /**
+     * @param {object: Namespace.Model|Namespace.Document|null} model
+     * @param {object|function|null} object
+     * @return {boolean}
+     */
+    isValidArguments(model, object) {
+        return (!this.isModel(model) && this.isExecutor(object)) || (this.isModel(model) && (this.isDocument(object) || this.isCleanDocument(object)))
     }
 }
 
@@ -329,7 +389,7 @@ class TransactionError extends Error {
     }
 }
 
-class Transaction {
+class Transaction extends NamespaceParser {
 
     #REPLICA_SET = 'replicaSet';
     /**
@@ -351,6 +411,7 @@ class Transaction {
     #strict = true;
 
     constructor() {
+        super();
     }
 
     get useStrict() {
@@ -540,11 +601,16 @@ class Transaction {
     }
 
     /**
-     * @param {object: Namespace.Model|null} model
-     * @param {object|function} object
+     * @param {object: Namespace.Model|Namespace.Document|null} model
+     * @param {object|Namespace.Document|function|null} object
      * @return {TransactionData}
      */
-    add(model, object) {
+    add(model, object = null) {
+        if (model && !object) {
+            object = model;
+            model = this.parseModel(model);
+        }
+        if (!this.isValidArguments(model, object)) throw new Error('No Model is specified, it is not possible to convert the object into a model')
         const td = new TransactionData(model, object, this)
         this.#setTimestamps(td).#clearPerviousCommits();
         this.transactions.push(td)

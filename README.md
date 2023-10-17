@@ -42,14 +42,16 @@ const transaction = new Transaction().setSendbox(true);
 const {Transaction} = require("transactions-mongoose");
 const transaction = new Transaction().setSendbox(true);
 
-const transactionData1 = transaction.add(Person, {
+const transactionData1 = transaction.add({
+    Person,
     firstname: 'Sancho',
     lastname: 'Panse',
     age: 22,
     sex: 'male',
     status: 'free'
 });
-const transactionData2 = transaction.add(Person, {
+const transactionData2 = transaction.add({
+    Model: 'Person',
     firstname: 'Janna',
     lastname: 'Dark',
     age: 21,
@@ -79,11 +81,11 @@ let personSancho = await Person.findById('...Sancho id');
 personSancho.age += 1;
 personSancho.status = 'married';
 personSancho.friend_id = '...Hulio Iglessias id';
-transaction.add(Person, personSancho);
+transaction.add(personSancho);
 
 // variant #2 - by document and update object
 let personJanna = await Person.findById('...Janna id');
-transaction.add(Person, personJanna).update({
+transaction.add(personJanna).update({
     age: ++personJanna.age,
     status: 'married',
     friend_id: personSancho._id,
@@ -91,7 +93,10 @@ transaction.add(Person, personJanna).update({
 });
 
 // variant #3 - by ObjectId
-transaction.add(Person, {_id: '...Sancho id'}).update({
+transaction.add(Person, {_id: personSancho._id}).update({
+    friend_id: personJanna._id
+});
+transaction.add({Person, _id: personSancho._id}).update({
     friend_id: personJanna._id
 });
 
@@ -106,19 +111,13 @@ const transaction = new Transaction().setSendbox(true);
 
 const getAvatar = async (id) => {
     const response = await fetch('https://i.pravatar.cc/300?u=' + id);
-    const blob = await response.blob();
-    return new Promise((onSuccess, onError) => {
-        const reader = new FileReader() ;
-        reader.onload = function () {
-            onSuccess(this.result)
-        };
-        reader.readAsDataURL(blob);
-    });
+    const blob = await response.blob()
+    return "data:" + blob.type + ';base64,' + Buffer.from(await blob.arrayBuffer()).toString('base64');
 };
 
 const transactionData = transaction.execute(async () => {
     let personSancho = await Person.findById('...Sancho id');
-    transaction.add(Person, personSancho).update({
+    transaction.add(personSancho).update({
         updatedAt: Date.now(),
         __v: ++personSancho.__v
     });
@@ -128,12 +127,12 @@ const transactionData = transaction.execute(async () => {
     transaction.execute(async () => {
         let personHulio = await Person.findById('...Hulio id');
         personHulio.avatar = await getAvatar(personHulio._id);
-        transaction.add(Person, personHulio)
+        transaction.add(personHulio)
     });
 
     let personJanna = await Person.findById('...Janna id');
     personJanna.avatar = await getAvatar(personJanna._id);
-    const td = transaction.add(Person, personJanna)
+    const td = transaction.add(personJanna)
     
     // The result can be whatever you want
     // we will return the Janna document update result
@@ -143,7 +142,7 @@ const transactionData = transaction.execute(async () => {
 
 // and also execute it :)
 personJanna.updatedAt = Date.now()
-transaction.add(Person, personJanna)
+transaction.add(personJanna)
 
 await transaction.commit();
 console.log('transaction result', transactionData.result.result);

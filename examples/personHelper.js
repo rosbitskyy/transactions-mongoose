@@ -13,20 +13,25 @@ const Person = require("./models/Person");
 const createNewPersons = async () => {
     const transaction = new Transaction().setSendbox(true);
 
-    const Sancho = transaction.add(Person, {
+    // variant #1
+    const Sancho = transaction.add({
+        Person, // Be careful - key Person may have been used by you before
         firstname: 'Sancho',
         lastname: 'Panse',
         age: 22,
         sex: 'male',
         status: 'free'
     });
-    const Janna = transaction.add(Person, {
+    // variant #2
+    const Janna = transaction.add({
+        Model: 'Person', // or Model: Person - Be careful - key Model may have been used by you before
         firstname: 'Janna',
         lastname: 'Dark',
         age: 21,
         sex: 'female',
         status: 'free'
     });
+    // variant #3
     const Hulio = transaction.add(Person, {
         firstname: 'Hulio',
         lastname: 'Iglessias',

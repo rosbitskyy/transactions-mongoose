@@ -21,7 +21,7 @@ const personHelper = require('./personHelper');
 
     const transaction = new Transaction().setSendbox(true);
 
-    const persons = await personHelper.createNewPersons()
+    const persons = await personHelper.createNewPersons(true)
 
     let personSancho = await Person.findById(persons.Sancho._id); // test Sancho exists?
     let personJanna = await Person.findById(persons.Janna._id);

@@ -135,12 +135,13 @@ class NamespaceParser {
      * @param {object|HydratedDocument} v
      * @return {boolean}
      */
-    isDocument = (v) => !!v && v.constructor && v.constructor.name === 'model' && !!v.constructor.modelName && !!v._doc;
+    isDocument = (v) => !!v && v.constructor && v.constructor.name === 'model' &&
+        !!Namespace.modelNames().includes(v.constructor.modelName) && !!v._doc;
     /**
      * @param {object|HydratedDocument} v
      * @return {HydratedDocument|null}
      */
-    documentModel = (v) => this.isDocument(v) && v.db ? (v.db.models[Object.keys(v.db.models)[0]]) : null;
+    documentModel = (v) => this.isDocument(v) ? Namespace.model(v.constructor.modelName) : null;
     /**
      * @param {object} v
      * @return {boolean}

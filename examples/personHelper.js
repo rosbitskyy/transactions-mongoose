@@ -10,8 +10,12 @@
 const {Transaction} = require("../src");
 const Person = require("./models/Person");
 
-const createNewPersons = async () => {
-    const transaction = new Transaction().setSendbox(true);
+/**
+ * @param {boolean} sandbox
+ * @return {Promise<{Sancho, Hulio, Janna}>}
+ */
+const createNewPersons = async (sandbox = true) => {
+    const transaction = new Transaction().setSendbox(sandbox);
 
     // variant #1
     const Sancho = transaction.add({

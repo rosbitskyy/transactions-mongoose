@@ -12,6 +12,8 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require("mongoose");
 const {Transaction} = require("../src/index");
 const personHelper = require('./personHelper');
+const {describe, it} = require("node:test");
+const {strict: assert} = require("node:assert");
 
 
 (async () => {
@@ -22,12 +24,11 @@ const personHelper = require('./personHelper');
 
     const transaction = new Transaction().setSendbox(true);
 
-    const persons = await personHelper.createNewPersons()
+    const persons = await personHelper.createNewPersons(true)
 
     let personSancho = await Person.findById(persons.Sancho._id); // test Sancho exists?
     let personJanna = await Person.findById(persons.Janna._id);
     let personHulio = await Person.findById(persons.Hulio._id);
-
 
     const transactionData = transaction.execute(async () => {
         transaction.add(personSancho).update({
@@ -56,7 +57,22 @@ const personHelper = require('./personHelper');
     transaction.add(personJanna)
 
     await transaction.commit();
-    console.log('transaction result', transactionData.result.result);
+
+    let Janna = await Person.findById(persons.Janna._id);
+    describe('Transaction Execute', () => {
+        it('Execute return: TransactionData', () => {
+            assert.strictEqual(transactionData.constructor.name, 'TransactionData');
+        })
+        it('TransactionData result is TransactionData', () => {
+            assert.strictEqual(transactionData.result.constructor.name, 'TransactionData');
+        })
+        it('Person Janna has avatar', () => {
+            assert.strictEqual(Janna.avatar && Janna.avatar.includes('base64') > -1, true);
+        })
+        it('commits', () => {
+            assert.strictEqual(transaction.commits.length, 3);
+        })
+    })
 
 
     await mongoose.disconnect();

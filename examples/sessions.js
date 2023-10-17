@@ -12,6 +12,8 @@ const {MongoMemoryReplSet} = require('mongodb-memory-server');
 const mongoose = require("mongoose");
 const {Transaction} = require("../src/index");
 const personHelper = require('./personHelper');
+const {describe, it} = require("node:test");
+const {strict: assert} = require("node:assert");
 
 
 (async () => {
@@ -21,9 +23,23 @@ const personHelper = require('./personHelper');
     console.log('mongo uri:', uri);
     await mongoose.connect(uri, {dbName: "verify"});
 
-    const transaction = new Transaction().setSendbox(true);
+    const transaction = new Transaction().setSendbox(false);
 
-    const persons = await personHelper.createNewPersons()
+    const persons = await personHelper.createNewPersons(false)
+    describe('Transaction Session work', () => {
+        it('Replica Set', () => {
+            assert.strictEqual(transaction.isReplicaSet, true);
+        })
+        it(persons.Sancho.firstname + ' created', () => {
+            assert.strictEqual(transaction.isDocument(persons.Sancho), true);
+        })
+        it(persons.Janna.firstname + ' created', () => {
+            assert.strictEqual(transaction.isDocument(persons.Sancho), true);
+        })
+        it(persons.Hulio.firstname + ' created', () => {
+            assert.strictEqual(transaction.isDocument(persons.Sancho), true);
+        })
+    })
 
     let personSancho = await Person.findById(persons.Sancho._id); // test Sancho exists?
     let personJanna = await Person.findById(persons.Janna._id);
@@ -31,9 +47,21 @@ const personHelper = require('./personHelper');
 
     const showPersonsAge = async () => {
         // let's check that nothing has changed?
-        console.log('Sancho age is 22 -', await Person.findById(persons.Sancho._id).select('-_id age'))
-        console.log('Janna age is 21 -', await Person.findById(persons.Janna._id).select('-_id age'))
-        console.log('Hulio age is 35 -', await Person.findById(persons.Hulio._id).select('-_id age'), '\n\n')
+        const Sancho = await Person.findById(persons.Sancho._id).select('-_id age')
+        const Janna = await Person.findById(persons.Janna._id).select('-_id age')
+        const Hulio = await Person.findById(persons.Hulio._id).select('-_id age')
+
+        describe('Transaction Session fail', () => {
+            it('Sancho age is 22', () => {
+                assert.strictEqual(Sancho.age, 22);
+            });
+            it('Janna age is 21', () => {
+                assert.strictEqual(Janna.age, 21);
+            });
+            it('Hulio age is 35', () => {
+                assert.strictEqual(Hulio.age, 35);
+            })
+        })
     }
 
 
@@ -56,7 +84,7 @@ const personHelper = require('./personHelper');
         await transaction.commit();
 
     } catch (e) {
-        console.log(e, '\nPassed!!')
+        // console.log(e, '\nPassed!!')
     }
     await showPersonsAge();
 
@@ -93,7 +121,7 @@ const personHelper = require('./personHelper');
         await transaction.commit();
 
     } catch (e) {
-        console.log(e, '\nPassed!!')
+        // console.log(e, '\nPassed!!')
     }
     await showPersonsAge();
 
@@ -130,7 +158,7 @@ const personHelper = require('./personHelper');
         await transaction.commit();
 
     } catch (e) {
-        console.log(e, '\nPassed!!')
+        // console.log(e, '\nPassed!!')
     }
     await showPersonsAge()
 
@@ -166,12 +194,16 @@ const personHelper = require('./personHelper');
     });
     await transaction.commit();
 
-    console.log('List of all Persons:')
-    for await (let v of (await Person.find({}, {
-        firstname: 1,
-        age: 1
-    }).cursor())) console.log('\t', v.name, 'age is', v.age)
-
+    const list100 = await Person.find({age: 100}, {firstname: 1, age: 1})
+    const pedro = await Person.findOne({firstname: 'Pedro'})
+    describe('Transaction Session - Replica Set', () => {
+        it('Reload document with/without session, save with/without', () => {
+            assert.strictEqual(list100.filter(it => it.age === 100).length, 3);
+        })
+        it('new Pedro document stored', () => {
+            assert.strictEqual(pedro.age, 33);
+        })
+    })
 
     await mongoose.disconnect();
     await mongod.stop();

@@ -11,17 +11,18 @@ on:
       - 'src/**'
       - 'examples/**'
 permissions:
-      contents: read
-      
+  contents: read
+
 jobs:
-  test:
+  cr_upd_no_replica_set:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        node: [18, 20]
-        os: [macos-latest, ubuntu-latest]
-    name: Node ${{ matrix.node }} OS ${{ matrix.os }}
+        node: [ 16, 18, 20 ]
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        test: [ parse, insert, update ]
+    name: Node ${{ matrix.node }} OS ${{ matrix.os }} ${{ matrix.test }} without replica set
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -29,4 +30,42 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm install --package-lock-only
       - run: npm ci
-      - run: npm test
+      - run: npm run test:${{ matrix.test }}
+
+  execute_no_replica_set:
+    need: [ cr_upd_no_replica_set ]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [ 18, 20 ]
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        test: [ execute ]
+    name: Node ${{ matrix.node }} OS ${{ matrix.os }} ${{ matrix.test }} without replica set
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install --package-lock-only
+      - run: npm ci
+      - run: npm run test:${{ matrix.test }}
+
+    replica_set:
+      need: [ cr_upd_no_replica_set ]
+      runs-on: ${{ matrix.os }}
+      strategy:
+        fail-fast: false
+        matrix:
+          node: [ 18, 20 ]
+          os: [ macos-latest, ubuntu-latest, windows-latest ]
+          test: [ session ]
+      name: Node ${{ matrix.node }} OS ${{ matrix.os }} replica set
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node }}
+        - run: npm install --package-lock-only
+        - run: npm ci
+        - run: npm run test:${{ matrix.test }}

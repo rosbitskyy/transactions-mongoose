@@ -23,7 +23,6 @@ jobs:
       matrix:
         node: [ 16, 18, 20 ]
         os: [ macos-latest, ubuntu-latest, windows-latest ]
-        test: [ insert update execute session ]
     name: Node ${{ matrix.node }} OS ${{ matrix.os }} ${{ matrix.test }}
     steps:
       - uses: actions/checkout@v3
@@ -32,4 +31,4 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm install --package-lock-only
       - run: npm ci
-      - run: npm run test:${{ matrix.test }}
+      - run: npm run test

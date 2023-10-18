@@ -52,9 +52,23 @@ const createNewPersons = async (sandbox = true) => {
     }
 };
 
+const get = async (...args) => {
+    if (fetch) return (await fetch(args)); // real on node 18+ :)
+    else // node 16- :)
+        return {
+            status: 200,
+            blob: async () => {
+                return {
+                    type: 'awesome',
+                    arrayBuffer: async (c = 30 * 30) => Array(c).map(v => Math.floor(256 * Math.random()))
+                }
+            }
+        }
+}
 
+// node 18+
 const getAvatar = async (id) => {
-    const response = await fetch('https://i.pravatar.cc/50?u=' + id);
+    const response = await get('https://i.pravatar.cc/50?u=' + id);
     const blob = await response.blob()
     return "data:" + blob.type + ';base64,' + Buffer.from(await blob.arrayBuffer()).toString('base64');
 };

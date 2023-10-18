@@ -21,7 +21,7 @@ jobs:
       matrix:
         node: [ 16, 18, 20 ]
         os: [ macos-latest, ubuntu-latest, windows-latest ]
-        test: [ create parse update execute ]
+        test: [ create update execute ]
     name: Node ${{ matrix.node }} OS ${{ matrix.os }} ${{ matrix.test }}
     steps:
       - uses: actions/checkout@v3

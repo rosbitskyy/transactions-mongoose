@@ -52,7 +52,7 @@ jobs:
       - run: npm run test:${{ matrix.test }}
 
   replicaset:
-    needs: [ no_replica_and_replicaset, with_executor ]
+    needs: [ no_replica_and_replicaset ]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

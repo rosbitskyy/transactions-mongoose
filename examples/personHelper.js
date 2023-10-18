@@ -53,14 +53,17 @@ const createNewPersons = async (sandbox = true) => {
 };
 
 const get = async (...args) => {
-    if (fetch) return (await fetch(args)); // real on node 18+ :)
-    else // node 16- :)
+    if (fetch) return (await fetch(args)); // node 18+
+    else
         return {
             status: 200,
             blob: async () => {
                 return {
-                    type: 'awesome',
-                    arrayBuffer: async (c = 30 * 30) => Array(c).map(v => Math.floor(256 * Math.random()))
+                    type: 'node16', arrayBuffer: async (c = 30 * 30) => {
+                        const r = Array(c);
+                        for (let i = 0; i < c; ++i) r[i] = Math.floor(256 * Math.random());
+                        return r;
+                    }
                 }
             }
         }

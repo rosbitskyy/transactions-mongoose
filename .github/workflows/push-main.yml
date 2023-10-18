@@ -31,5 +31,5 @@ jobs:
       - run: npm install --package-lock-only
       - run: npm ci
         if: (${{ matrix.test }}==execute && ${{ matrix.node }}>16) || ${{ matrix.test }}!=execute
-      - run: npm test:${{ matrix.test }}
+      - run: npm run test:${{ matrix.test }}
 

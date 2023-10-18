@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  transaction:
+  no_replica_and_replicaset:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

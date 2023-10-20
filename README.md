@@ -16,6 +16,8 @@ Very simple and extremely easy ☕️ :
 
 And yes, let's start!
 
+[☕️ buy me a coffee](https://www.buymeacoffee.com/rosbitskyy.ruslan)
+
 ### Installation
 
 First install [Node.js](https://nodejs.org/uk) and [MongoDB](https://www.mongodb.com/try). Then:

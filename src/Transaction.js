@@ -183,7 +183,15 @@ class NamespaceParser {
      * @return {boolean}
      */
     isValidArguments(model, object) {
-        return (!this.isModel(model) && this.isExecutor(object)) || (this.isModel(model) && (this.isDocument(object) || this.isCleanDocument(object)))
+        if (object) delete object.id
+        const isExecutor = (!this.isModel(model) && this.isExecutor(object));
+        const isDoc = (this.isModel(model) && (this.isDocument(object) || this.isCleanDocument(object)));
+        const exclude = ['__v', '_id', 'id'];
+        if (isDoc) {
+            if (this.isCleanDocument(object) && !object._id) exclude.map(it => delete object[it]);
+            else if (this.isDocument(object) && !object._doc._id) exclude.map(it => delete object._doc[it]);
+        }
+        return isExecutor || isDoc;
     }
 }
 

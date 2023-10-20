@@ -12,6 +12,8 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require("mongoose");
 const {Transaction} = require("../src/index");
 const personHelper = require('./personHelper');
+const {describe, it} = require("node:test");
+const {strict: assert} = require("node:assert");
 
 (async () => {
     const mongod = await MongoMemoryServer.create();
@@ -63,6 +65,22 @@ const personHelper = require('./personHelper');
 
     await transaction.commit();
 
+    // check
+    personSancho = await Person.findById(persons.Sancho._id); // test Sancho exists?
+    personJanna = await Person.findById(persons.Janna._id);
+    personHulio = await Person.findById(persons.Hulio._id);
+    describe('Transactions - No Replica Set', () => {
+        it('Sancho married', () => {
+            assert.strictEqual(personSancho.status, 'married');
+        })
+        it('Janna married', () => {
+            assert.strictEqual(personJanna.status, 'married');
+        })
+        it('Sancho friend Janna', () => {
+            assert.strictEqual(personJanna._id.toString(), personSancho.friend_id.toString());
+        })
+
+    })
 
     await mongoose.disconnect();
     await mongod.stop();

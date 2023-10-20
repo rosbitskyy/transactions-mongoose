@@ -11,6 +11,8 @@ const Person = require("./models/Person");
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require("mongoose");
 const {Transaction} = require("../src/index");
+const {describe, it} = require("node:test");
+const {strict: assert} = require("node:assert");
 
 (async () => {
     const mongod = await MongoMemoryServer.create();
@@ -47,6 +49,26 @@ const {Transaction} = require("../src/index");
 
     console.log('transaction 1', transactionData1.result) // the result of the save() operation
     console.log('transaction 2 document', transactionData2.document)
+
+    // test _id <--> idSynonym
+    const doc = transactionData1.result._doc; // extract result
+    doc.id = doc._id; // copy orig _id to id
+    delete doc._id;
+    const td = transaction.add(Person, doc);
+    await transaction.commit();
+    console.log('persons', await Person.find())
+
+    // check
+    const count = await Person.countDocuments({})
+    const count2 = await Person.countDocuments({firstname: 'Sancho'})
+    describe('Transactions - No Replica Set', () => {
+        it('Persons count 4', () => {
+            assert.strictEqual(count, 4);
+        })
+        it('Sancho count 2', () => {
+            assert.strictEqual(count2, 2);
+        })
+    })
 
     await mongoose.disconnect();
     await mongod.stop();

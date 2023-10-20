@@ -16,7 +16,7 @@ Very simple and extremely easy ☕️ :
 
 And yes, let's start!
 
-[☕️ buy me a coffee](https://www.buymeacoffee.com/rosbitskyy.ruslan)
+☕️ [buy me a coffee](https://www.buymeacoffee.com/rosbitskyy.ruslan)
 
 ### Installation
 

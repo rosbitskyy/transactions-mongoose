@@ -229,7 +229,7 @@ class TransactionData {
         this.function = null
 
         this.#defineFunction();
-        this.#setDebugerInfo();
+        this.#setDebuggerInfo();
         this.#collectUniques();
     }
 
@@ -284,8 +284,8 @@ class TransactionData {
         return obj;
     }
 
-    #setDebugerInfo() {
-        this.debuger = TransactionError.debuger();
+    #setDebuggerInfo() {
+        this.debugger = TransactionError.debugger();
     }
 
     #defineFunction() {
@@ -375,7 +375,7 @@ class TransactionError extends Error {
         }
     }
 
-    static debuger() {
+    static debugger() {
         const lookup = ['process', 'Transaction'];
         let e = new Error();
         const stack = e.stack.split("\n").slice(1).reverse();
@@ -392,7 +392,7 @@ class TransactionError extends Error {
         try {
             const name = (stack ? stack.split("\n")[1] : '');
             this.stack = null; //🇺🇦нам ніфіга це не цікаво
-            this.info = (name + '\n' + transaction.debuger.frame).trim()
+            this.info = (name + '\n' + transaction.debugger.frame).trim()
         } catch (e) {
         }
     }
@@ -521,7 +521,7 @@ class Transaction extends NamespaceParser {
                             for (let v of replacers) variable = variable.replace(v, '').trim();
                             let saving = (fnStr.split('\n').find(it => it.includes(`${variable}.save`)) || '').trim();
                             saving = saving.startsWith('//') ? null : saving;
-                            let debugLine = transaction.debuger.line.split(':');
+                            let debugLine = transaction.debugger.line.split(':');
                             debugLine[1] = Number(debugLine[1]) + position;
                             debugLine[2] = Number(lines[lines.length - 1].length + 1);
                             debugLine = String(debugLine.join(':') + ' ');

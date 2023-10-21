@@ -19,7 +19,7 @@
     "email": "rosbitskyy@gmail.com",
     "url": "https://github.com/rosbitskyy/"
   },
-  "license": "MIT",
+  "license": "Apache License Version 2.0, January 2004",
   "dependencies": {
     "mongoose": "latest"
   },

@@ -1,6 +1,6 @@
 {
   "name": "transactions-mongoose",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Transactions for mongoose",
   "main": "index.js",
   "repository": {

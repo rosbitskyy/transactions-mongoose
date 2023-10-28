@@ -3,6 +3,7 @@
 [![os, nodes](https://github.com/rosbitskyy/transactions-mongoose/actions/workflows/push-main.yml/badge.svg)](https://github.com/rosbitskyy/transactions-mongoose/actions)
 [![npm version](https://img.shields.io/npm/v/transactions-mongoose.svg)](https://www.npmjs.com/package/transactions-mongoose)
 [![Downloads/month](https://img.shields.io/npm/dm/transactions-mongoose.svg)](http://www.npmtrends.com/transactions-mongoose)
+[![Vulnerabilities](https://snyk.io/test/npm/transactions-mongoose/badge.svg)](https://snyk.io/test/npm/transactions-mongoose)
 
 **Transactions allow you to perform multiple group operations in isolation and undo all operations if one of them fails.**
 

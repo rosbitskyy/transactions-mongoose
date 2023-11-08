@@ -10,7 +10,7 @@
 /**
  * @type {{hasValidator: boolean, FieldValidator: {validator: function, message?: string},
  * type?: object, required?: boolean, unique?: boolean, index?: boolean, min: number, max: number,
- * validate?:{validator: function, message?: string}}
+ * validate?:{validator: function, message?: string}}}
  */
 const SchemaConstructor = {}
 
@@ -201,7 +201,7 @@ class TransactionData {
     OBJECT = 'Object'
     FUNCTION = 'Function'
     DOCUMENT = 'Document'
-
+    #excludeUpdateFields = ['_id', 'id', 'tableData'];
     /**
      * @type {[string]}
      */
@@ -310,6 +310,7 @@ class TransactionData {
      */
     update(data) {
         if (data.constructor.name === this.OBJECT) {
+            this.#excludeUpdateFields.map(it => delete data[it]);
             for (let k of Object.keys(data)) this.document[k] = data[k];
             this.#collectUniques()
         }

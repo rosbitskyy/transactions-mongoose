@@ -1,6 +1,6 @@
 {
   "name": "transactions-mongoose",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Transactions for mongoose",
   "main": "index.js",
   "repository": {
@@ -24,7 +24,13 @@
     "mongoose": "latest"
   },
   "devDependencies": {
-    "mongodb-memory-server": "latest"
+    "mongodb-memory-server": "latest",
+    "dotenv": "^16.3.1",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "typescript": "^5.2.2",
+    "tsd": "^0.29.0",
+    "@types/node": "^20.8.10"
   },
   "scripts": {
     "test": "npm run test:insert && npm run test:update && npm run test:execute && npm run test:session",

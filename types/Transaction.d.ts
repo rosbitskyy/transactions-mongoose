@@ -222,7 +222,7 @@ export class TransactionError extends Error {
     };
 }
 
-declare class NamespaceParser {
+export class NamespaceParser {
     /**
      * @param {object|HydratedDocument} v
      * @return {boolean}
@@ -270,7 +270,7 @@ declare class NamespaceParser {
 
 import Namespace = require("mongoose");
 
-declare class Document {
+export class Document {
     _ABSTRACT: string;
     _doc: {};
     isNew: boolean;

@@ -20,6 +20,7 @@ String.prototype.capitalize = function () {
 
 const Namespace = require('mongoose');
 
+/** @typedef {import('../types/').Document} Document */
 class Document {
     _ABSTRACT = 'Abstract';
     _doc = {}
@@ -125,6 +126,7 @@ class Document {
     }
 }
 
+/** @typedef {import('../types/').NamespaceParser} NamespaceParser */
 class NamespaceParser {
     /**
      * @param {object|HydratedDocument} v
@@ -195,6 +197,7 @@ class NamespaceParser {
     }
 }
 
+/** @typedef {import('../types/').TransactionData} TransactionData */
 class TransactionData {
 
     MODEL = 'model'
@@ -349,6 +352,7 @@ class TransactionData {
 
 }
 
+/** @typedef {import('../types/').TransactionError} TransactionError */
 class TransactionError extends Error {
     /**
      * @param {TransactionData} _T
@@ -399,6 +403,7 @@ class TransactionError extends Error {
     }
 }
 
+/** @typedef {import('../types/').Transaction} Transaction */
 class Transaction extends NamespaceParser {
 
     #REPLICA_SET = 'replicaSet';

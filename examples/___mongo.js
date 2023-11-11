@@ -10,7 +10,7 @@
 
 const {MongoMemoryReplSet, MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require("mongoose");
-const {Transaction} = require("../src/Transaction");
+const {Transaction} = require("../src");
 
 const transaction = new Transaction()
 let mongod;

@@ -14,12 +14,10 @@ const {Transaction} = require("../src/index");
 const personHelper = require('./personHelper');
 const {describe, it} = require("node:test");
 const {strict: assert} = require("node:assert");
+const {startServer, stopServer} = require("./___mongo");
 
 (async () => {
-    const mongod = await MongoMemoryServer.create();
-    const uri = mongod.getUri();
-    console.log('mongo uri:', uri);
-    await mongoose.connect(uri, {dbName: "verify"});
+    await startServer()
 
     const transaction = new Transaction().setSendbox(true);
 
@@ -82,6 +80,5 @@ const {strict: assert} = require("node:assert");
 
     })
 
-    await mongoose.disconnect();
-    await mongod.stop();
+    await stopServer()
 })();

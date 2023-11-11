@@ -189,7 +189,7 @@ export class TransactionData {
 
     /**
      * @param {string} field
-     * @return {SchemaConstructor}
+     * @return {object}
      */
     schemaConstructor(field: string): any;
 }

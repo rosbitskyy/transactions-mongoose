@@ -14,14 +14,11 @@ const {Transaction} = require("../src/index");
 const personHelper = require('./personHelper');
 const {describe, it} = require("node:test");
 const {strict: assert} = require("node:assert");
+const {startServer, stopServer} = require("./___mongo");
 
 
 (async () => {
-    const mongod = await MongoMemoryReplSet.create({replSet: {count: 4}});
-    // const mongod = await MongoMemoryServer.create(); // <-- wrong way for transactions with session
-    const uri = mongod.getUri();
-    console.log('mongo uri:', uri);
-    await mongoose.connect(uri, {dbName: "verify"});
+    await startServer(true)
 
     const transaction = new Transaction().setSendbox(false);
 
@@ -205,6 +202,5 @@ const {strict: assert} = require("node:assert");
         })
     })
 
-    await mongoose.disconnect();
-    await mongod.stop();
+    await stopServer()
 })();

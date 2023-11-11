@@ -34,9 +34,10 @@
   },
   "scripts": {
     "test": "npm run test:insert && npm run test:update && npm run test:execute && npm run test:session",
-    "test:insert": "node ./examples/create-insert.js",
-    "test:update": "node ./examples/update-existing.js",
-    "test:execute": "node ./examples/execute.js",
-    "test:session": "node ./examples/sessions.js"
+    "test:insert": "node examples/create-insert.test.js",
+    "test:update": "node examples/update-existing.test.js",
+    "test:execute": "node examples/execute.test.js",
+    "test:session": "node examples/sessions.test.js",
+    "test:mocha": "mocha examples/*.test.js"
   }
 }

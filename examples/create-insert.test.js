@@ -60,7 +60,7 @@ const {startServer, stopServer} = require("./___mongo");
     const count = await Person.countDocuments({})
     const count2 = await Person.countDocuments({firstname: 'Sancho'})
     describe('Transactions - No Replica Set', () => {
-        it('Persons count 4', () => {
+        it('Persons count 6', () => {
             assert.strictEqual(count > 0, true);
         })
         it('Sancho count 2', () => {

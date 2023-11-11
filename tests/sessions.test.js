@@ -10,7 +10,7 @@
 const Person = require("./models/Person");
 const {MongoMemoryReplSet} = require('mongodb-memory-server');
 const mongoose = require("mongoose");
-const {Transaction} = require("../src/index");
+const {Transaction} = require("../src");
 const personHelper = require('./personHelper');
 const {describe, it} = require("node:test");
 const {strict: assert} = require("node:assert");

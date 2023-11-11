@@ -34,10 +34,10 @@
   },
   "scripts": {
     "test": "npm run test:insert && npm run test:update && npm run test:execute && npm run test:session",
-    "test:insert": "node tests/create-insert.test.js",
-    "test:update": "node tests/update-existing.test.js",
-    "test:execute": "node tests/execute.test.js",
-    "test:session": "node tests/sessions.test.js",
-    "test:mocha": "mocha tests/*.test.js"
+    "test:insert": "node ./tests/create-insert.test.js",
+    "test:update": "node ./tests/update-existing.test.js",
+    "test:execute": "node ./tests/execute.test.js",
+    "test:session": "node ./tests/sessions.test.js",
+    "test:mocha": "mocha ./tests/*.test.js"
   }
 }

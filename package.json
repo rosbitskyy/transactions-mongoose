@@ -1,8 +1,9 @@
 {
   "name": "transactions-mongoose",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Transactions for mongoose",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rosbitskyy/transactions-mongoose.git"
@@ -33,11 +34,12 @@
     "@types/node": "^20.8.10"
   },
   "scripts": {
-    "test": "npm run test:insert && npm run test:update && npm run test:execute && npm run test:session",
+    "test": "npm run test:tsd && npm run test:insert && npm run test:update && npm run test:execute && npm run test:session",
     "test:insert": "node ./tests/create-insert.test.js",
     "test:update": "node ./tests/update-existing.test.js",
     "test:execute": "node ./tests/execute.test.js",
     "test:session": "node ./tests/sessions.test.js",
-    "test:mocha": "mocha ./tests/*.test.js"
+    "test:mocha": "mocha ./tests/*.test.js",
+    "test:tsd": "npx tsd"
   }
 }

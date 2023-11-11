@@ -157,11 +157,11 @@ export class TransactionData {
 
     get isExecutor(): boolean;
 
-    get type(): any;
+    get type(): string;
 
     get transaction(): Transaction;
 
-    get uniqueFields(): [string];
+    get uniqueFields(): string[];
 
     /**
      * @return {boolean}
@@ -169,18 +169,16 @@ export class TransactionData {
     get isVerified(): boolean;
 
     /**
-     * @return {{[]: SchemaConstructor}}
+     * @return {Namespace.Schema}
      */
-    get schema(): {};
+    get schema(): object;
 
     get schemaFields(): string[];
 
     /**
-     * @return {{any}}
+     * @return {object}
      */
-    get modifiedData(): {
-        any: any;
-    };
+    get modifiedData(): object;
 
     /**
      * @param {object} data
@@ -272,7 +270,7 @@ import Namespace = require("mongoose");
 
 export class Document {
     _ABSTRACT: string;
-    _doc: {};
+    _doc: object;
     isNew: boolean;
     model: any;
     _modelName: string;

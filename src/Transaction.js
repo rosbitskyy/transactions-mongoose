@@ -244,10 +244,16 @@ class TransactionData {
         return !!this.document;
     }
 
+    /**
+     * @return {boolean}
+     */
     get isExecutor() {
         return !!this.function;
     }
 
+    /**
+     * @return {string}
+     */
     get type() {
         return this.data.constructor.name.replace('Async', '')
     }
@@ -268,7 +274,7 @@ class TransactionData {
     }
 
     /**
-     * @return {{[]: SchemaConstructor}}
+     * @return {object}
      */
     get schema() {
         return this.model.schema.obj
@@ -279,7 +285,7 @@ class TransactionData {
     }
 
     /**
-     * @return {{any}}
+     * @return {object}
      */
     get modifiedData() {
         const doc = this.document, obj = {};

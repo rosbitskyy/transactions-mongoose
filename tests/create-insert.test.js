@@ -8,9 +8,7 @@
  */
 
 const Person = require("./models/Person");
-const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require("mongoose");
-const {Transaction} = require("../src/index");
+const {Transaction} = require("../src");
 const {describe, it} = require("node:test");
 const {strict: assert} = require("node:assert");
 const {startServer, stopServer} = require("./___mongo");
@@ -61,7 +59,7 @@ const {startServer, stopServer} = require("./___mongo");
     const count2 = await Person.countDocuments({firstname: 'Sancho'})
     describe('Transactions - No Replica Set', () => {
         it('Persons count 4 single local test and 6 with mass npm/mocha test', () => {
-            assert.strictEqual([4, 6].includes(count), true);
+            assert.strictEqual([4, 6].includes(Number(count)), true);
         })
         it('Sancho count 2', () => {
             assert.strictEqual(count2, 2);

@@ -8,8 +8,6 @@
  */
 
 const Person = require("./models/Person");
-const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require("mongoose");
 const {Transaction} = require("../src");
 const personHelper = require('./personHelper');
 const {describe, it} = require("node:test");
